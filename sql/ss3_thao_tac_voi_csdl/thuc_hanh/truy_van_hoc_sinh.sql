@@ -36,7 +36,7 @@ create table instructor_class(
  instructor_id int,
  class_id int,
  start_time date,
- end_time_time date,
+ end_time date,
  primary key (instructor_id,class_id),
  foreign key(instructor_id) references instructor(id),
  foreign key(class_id) references class(id)
@@ -56,7 +56,7 @@ INSERT INTO room(name, class_id) VALUES
 INSERT INTO student(name, gender, birthday, email, point, username, class_id) VALUES 
 ('Trần Văn Chung', 1, '2001-05-10', 'chungthuy@example.com', 7.5, 'chung128', 1),
 ('Nguyễn Văn Bình', 1, '2000-09-15', 'binhthuong@example.com', 8.0, 'binh123', 2),
-('Phạm Ngọc Khánh', 0, '2002-12-01', 'khanhngoc@example.com', 4.5, 'khanh123'),
+('Phạm Ngọc Khánh', 0, '2002-12-01', 'khanhngoc@example.com', 4.5, 'khanh123',null),
 ('Nguyễn Trí Đông', 1, '2003-03-11', 'dongnguyen@example.com', 9.0, 'dong123', 1),
 ('Lê Thị Thu Thảo', 1, '2000-06-06', 'thaole@example.com', 6.0, 'thao123', 2);
 INSERT INTO instructor (name, birthday, salary) VALUES
