@@ -65,4 +65,11 @@ left join order_detail od on o.order_id = od.order_id
 where od.order_id is null;
 -- Hiển thị mã hóa đơn, ngày bán và giá tiền của từng hóa đơn (giá một hóa đơn được tính bằng tổng giá bán của từng
 --  loại mặt hàng xuất hiện trong hóa đơn. Giá bán của từng loại được tính = odQTY*pPrice)
- 
+select 
+o.order_id,
+o.order_date,
+sum(od.order_qty*p.product_price) as total_price 
+from oorder o
+join order_detail od on od.order_id=o.order_id
+join product p on p.product_id=od.product_id
+group by o.order_id,o.order_date;
