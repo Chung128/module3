@@ -202,7 +202,7 @@ where nv.ho_ten like 'h%' or nv.ho_ten like 't%' or nv.ho_ten like 'k%' and char
 -- 3 .Hiển thị thông tin của tất cả khách hàng có độ tuổi từ 18 đến 50 tuổi và có địa chỉ ở “Đà Nẵng” hoặc “Quảng Trị”.
 select * 
 from khach_hang kh 
-where timestampdiff(year,kh.ngay_sinh,curdate())>18 and timestampdiff(year,kh.ngay_sinh,curdate())<50 and (kh.dia_chi like '%Đà Nẵng' or kh.dia_chi like '%Quảng Trị');
+where timestampdiff(year,kh.ngay_sinh,curdate())>=18 and timestampdiff(year,kh.ngay_sinh,curdate())<=50 and (kh.dia_chi like '%Đà Nẵng' or kh.dia_chi like '%Quảng Trị');
 
 -- 4 Đếm xem tương ứng với mỗi khách hàng đã từng đặt phòng bao nhiêu lần. Kết quả hiển thị được sắp xếp tăng dần theo số lần đặt phòng của khách hàng. Chỉ đếm những khách hàng nào có Tên loại khách hàng là “Diamond”.
 select kh.ma_khach_hang,kh.ho_ten,count(hd.ma_hop_dong) as so_lan_thue 
@@ -275,10 +275,12 @@ where year(hd.ngay_lam_hop_dong)=2021
 group by month(hd.ngay_lam_hop_dong)
 order by thang;
 
--- 10 Hiển thị thông tin tương ứng với từng hợp đồng thì đã sử dụng bao nhiêu dịch vụ đi kèm. Kết quả hiển thị bao gồm ma_hop_dong, ngay_lam_hop_dong, ngay_ket_thuc, tien_dat_coc, so_luong_dich_vu_di_kem (được tính dựa trên việc sum so_luong ở dich_vu_di_kem).
-select hd.ma_hop_dong,hd.ngay_lam_hop_dong,hd.ngay_ket_thuc_hop_dong,hd.tien_dat_coc,sum(ifnull(hdct.so_luong,0)) as so_luong
+-- 10 Hiển thị thông tin tương ứng với từng hợp đồng thì đã sử dụng bao nhiêu dịch vụ đi kèm. Kết quả hiển thị bao gồm 
+-- ma_hop_dong, ngay_lam_hop_dong, ngay_ket_thuc, tien_dat_coc, so_luong_dich_vu_di_kem (được tính dựa trên việc sum so_luong ở dich_vu_di_kem).
+select hd.ma_hop_dong,hd.ngay_lam_hop_dong,hd.ngay_ket_thuc_hop_dong,group_concat(dvdk.ten_dich_vu_di_kem),hd.tien_dat_coc,sum(ifnull(hdct.so_luong,0)) as so_luong
 from hop_dong hd
 left join hop_dong_chi_tiet hdct on hdct.ma_hop_dong=hd.ma_hop_dong
+left join dich_vu_di_kem dvdk on dvdk.ma_dich_vu_di_kem=hdct.ma_dich_vu_di_kem
 group by hd.ma_hop_dong
 order by hd.ma_hop_dong;
 
@@ -301,12 +303,13 @@ join dich_vu dv on dv.ma_dich_vu =hd.ma_dich_vu
 left join hop_dong_chi_tiet hdct on hdct.ma_hop_dong=hd.ma_hop_dong
 where year(ngay_lam_hop_dong)= 2020 and
      month(ngay_lam_hop_dong)in (10,11,12) and
-     dv.ma_dich_vu not in (select hd.tien_dat_coc
+     dv.ma_dich_vu not in 
+     (select hd.tien_dat_coc
 							from hop_dong hd
 							join nhan_vien nv on nv.ma_nhan_vien=hd.ma_nhan_vien
 							join  khach_hang kh on hd.ma_khach_hang=kh.ma_khach_hang
 							join dich_vu dv on dv.ma_dich_vu =hd.ma_dich_vu
-							left join hop_dong_chi_tiet hdct on hdct.ma_hop_dong=hd.ma_hop_dong
+							join hop_dong_chi_tiet hdct on hdct.ma_hop_dong=hd.ma_hop_dong
                             where year(ngay_lam_hop_dong)= 2021 and
 								  month(ngay_lam_hop_dong) in (1,2,3,4,5,6))
 group by hd.ma_hop_dong
@@ -346,7 +349,13 @@ order by hd.ma_hop_dong;
 -- dia_chi mới chỉ lập được tối đa 3 hợp đồng từ năm 2020 đến 2021.
 select nv.ma_nhan_vien,nv.ho_ten,td.ten_trinh_do,bp.ten_bo_phan,nv.so_dien_thoai,nv.dia_chi
 from nhan_vien nv
-join trinh_do td
+join trinh_do td on td.ma_trinh_do=nv.ma_trinh_do
+join bo_phan bp on bp.ma_bo_phan=nv.ma_bo_phan
+join hop_dong hd on hd.ma_nhan_vien=nv.ma_nhan_vien
+where year(hd.ngay_lam_hop_dong) in (2020,2021)
+group by nv.ma_nhan_vien
+having count(hd.ma_hop_dong)<=3
+order by nv.ma_nhan_vien;
 
 -- 16 Xóa những Nhân viên chưa từng lập được hợp đồng nào từ năm 2019 đến năm 2021.
 
