@@ -358,10 +358,48 @@ having count(hd.ma_hop_dong)<=3
 order by nv.ma_nhan_vien;
 
 -- 16 Xóa những Nhân viên chưa từng lập được hợp đồng nào từ năm 2019 đến năm 2021.
+SET SQL_SAFE_UPDATES = 0;
+delete from nhan_vien nv
+where not exists (select 1
+				from hop_dong hd
+				where hd.ma_nhan_vien=nv.ma_nhan_vien
+				and year(hd.ngay_lam_hop_dong) in (2019,2020,2021)
+                );
 
--- 17 Cập nhật thông tin những khách hàng có ten_loai_khach từ Platinum lên Diamond, chỉ cập nhật những khách hàng đã từng đặt phòng với Tổng Tiền thanh toán trong năm 2021 là lớn hơn 10.000.000 VNĐ.
+-- 17 Cập nhật thông tin những khách hàng có ten_loai_khach từ Platinum lên Diamond, chỉ cập nhật những khách hàng đã từng đặt phòng
+--  với Tổng Tiền thanh toán trong năm 2021 là lớn hơn 10.000.000 VNĐ.
+select hd.ma_hop_dong,kh.ho_ten,sum(ifnull(dvdk.gia*hdct.so_luong,0)+ifnull(dv.chi_phi_thue,0)) as tong_doanh_thu
+							from hop_dong hd 
+                            join khach_hang kh on kh.ma_khach_hang=hd.ma_khach_hang
+                            join dich_vu dv on dv.ma_dich_vu=hd.ma_dich_vu
+                            join hop_dong_chi_tiet hdct on hdct.ma_hop_dong=hd.ma_hop_dong
+                            join dich_vu_di_kem dvdk on hdct.ma_dich_vu_di_kem=dvdk.ma_dich_vu_di_kem
+                            where year(hd.ngay_lam_hop_dong)=2021
+                            group by hd.ma_hop_dong
+                            having tong_doanh_thu>10000000;
+						
+update  loai_khach lk
+join (select hd.ma_hop_dong,sum(ifnull(dvdk.gia*hdct.so_luong,0)+ifnull(dv.chi_phi_thue,0)) as tong_doanh_thu
+							from hop_dong hd 
+                            join dich_vu dv on dv.ma_dich_vu=hd.ma_dich_vu
+                            join hop_dong_chi_tiet hdct on hdct.ma_hop_dong=hd.ma_hop_dong
+                            join dich_vu_di_kem dvdk on hdct.ma_dich_vu_di_kem=dvdk.ma_dich_vu_di_kem
+                            where year(hd.ngay_lam_hop_dong)=2021
+                            group by hd.ma_hop_dong
+                            having tong_doanh_thu>10000000
+                            ) as danh_sach
+set lk.ten_loai_khach='Diamond'
+where lk.ten_loai_khach='Platinum';
 
 -- 18 Xóa những khách hàng có hợp đồng trước năm 2021 (chú ý ràng buộc giữa các bảng).
+SET SQL_SAFE_UPDATES = 0;
+
+select kh.ho_ten,hd.ngay_lam_hop_dong
+							from khach_hang kh
+							join hop_dong hd on hd.ma_khach_hang=kh.ma_khach_hang
+							where year(hd.ngay_lam_hop_dong)<2021;
+delete from hop_dong hd where year(hd.ngay_lam_hop_dong)<2021;
+delete from khach_hang where ma_khach_hang not in (select distinct ma_khach_hang from hop_dong); 
 
 -- 19 Cập nhật giá cho các dịch vụ đi kèm được sử dụng trên 10 lần trong năm 2020 lên gấp đôi.
 
