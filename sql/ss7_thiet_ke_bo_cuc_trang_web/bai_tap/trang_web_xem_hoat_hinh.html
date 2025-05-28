@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Phát triển trang web xem phim</title>
+</head>
+<style>
+    .img {
+        position: fixed;
+        width: 100%;
+        height: 100px;
+        z-index: 10;
+        background-color: white;
+    }
+    .img img{
+        margin-top: 10px;
+        margin-left: 50px;
+        width: 150px;
+        height: 80px;
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: Arial, sans-serif;
+    }
+
+    .menu {
+        height: 50px;
+        background-color: #111;
+        margin-top: 100px;
+        left: 0;
+        width: 100%;
+    }
+
+    .menu ul {
+        list-style: none;
+        display: flex;
+        height: 100%;
+    }
+
+    .menu li {
+        position: relative;
+        float: left;
+        list-style: none;
+    }
+
+    .menu li a {
+        display: block;
+        color: white;
+        text-decoration: none;
+        padding: 0 20px;
+        line-height: 50px;
+
+    }
+
+    .menu li a:hover {
+        background-color: #444444;
+    }
+
+    /* Submenu */
+    .menu li ul {
+        position: absolute;
+        top: 50px;
+        left: 0;
+        background-color: black;
+        visibility: hidden;
+    }
+
+    .menu li:hover ul {
+        visibility: visible;
+    }
+
+    .menu li ul li a {
+        width: 200px;
+        text-align: left;
+        padding-left: 100px;
+    }
+
+    .login-button a {
+        color: #ccc;
+        text-decoration: none;
+        line-height: 50px;
+        padding: 0 10px;
+    }
+
+    .login-button a:hover {
+        color: white;
+    }
+
+    /* Main content layout */
+    .main {
+        display: flex;
+        margin-top: 50px;
+        min-height: calc(100vh - 100px); /* header + footer */
+    }
+
+    .col-left, .col-right {
+        width: 30%;
+        background-color: #eee;
+        padding: 20px;
+    }
+
+    .col-center {
+        width: 70%;
+        padding: 20px;
+    }
+
+    .col-left a {
+        display: block;
+        margin-bottom: 10px;
+        position: sticky;
+        text-align: center;
+        color: blue;
+    }
+
+    .col-right button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    /* Footer */
+    .footer {
+        height: 50px;
+        background-color: #444;
+        color: white;
+        text-align: center;
+        line-height: 50px;
+    }
+</style>
+<body>
+<div class="img">
+    <img src="https://scontent.fsgn2-6.fna.fbcdn.net/v/t39.30808-6/308988215_420558886886453_3880479099924845226_n.png?_nc_cat=111&ccb=1-7&_nc_sid=6ee11a&_nc_ohc=MbrKEX4H7HkQ7kNvwF_ly7G&_nc_oc=AdnAzHVeOw5L-zDWTEK1HL9sb60c_WCXe7ONoGniPvLYBYLGj4DTeNrY7aobBud2Izo&_nc_zt=23&_nc_ht=scontent.fsgn2-6.fna&_nc_gid=Xja-rr0PQ-gj5ooumB1NQA&oh=00_AfKaWJMSNkrY-Cn9NGX3Ay7K7Ks0fbUGRkIbD8rg1Kid7Q&oe=683CA6CD" alt="hoạt hình">
+</div>
+<hr>
+<!-- Menu -->
+<div class="menu" style="display: flex; justify-content: space-between; align-items: center;">
+    <!-- Menu bên trái -->
+    <div class="menu-left">
+        <ul>
+            <li><a href="#">Loại phim</a></li>
+            <li><a href="#">Thịnh hành</a></li>
+            <li><a href="#">Thông tin</a></li>
+            <li><a href="#">Góp ý</a></li>
+        </ul>
+    </div>
+</div>
+
+<div class="main">
+    <div class="col-left">
+        <div><img src="https://phimmoiday.net/wp-content/uploads/2025/02/duoi-lan-nuoc-sau-99866-1-300x450.jpg "
+                  width="100%">
+            <a href="https://phimmoiday.net/watch-duoi-lan-nuoc-sau/full-sv1.html">Dưới làn nước sâu</a>
+        </div>
+        <hr>
+        <div><img src="https://phimmoiday.net/wp-content/uploads/2025/04/ma-thoi-den-nam-hai-quy-hu-100459-1.jpg"
+                  width="100%">
+            <a href="https://phimmoiday.net/watch-ma-thoi-den-nam-hai-quy-hu/full-sv1.html">Ma thổi đèn</a>
+        </div>
+        <hr>
+        <div><img src="https://phimmoiday.net/wp-content/uploads/2025/04/bong-ma-do-100381-1-300x450.jpg" width="100%">
+            <a href="https://phimmoiday.net/watch-bong-ma-do/full-sv1.html">Bóng ma đỏ</a>
+        </div>
+    </div>
+
+    <div class="col-center">
+        <iframe width="100%" height="50%"
+                src="https://www.youtube.com/embed/7l6Duvwp7H0"
+                title="YouTube video player"
+                frameborder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowfullscreen>
+        </iframe>
+        <h3>Quái Vật Thời Tiền Sử (2020) </h3>
+        <hr>
+        <p>Miêu tả: Hòn đảo bí ẩn có những cây cổ thụ cao chót vót và những đàn chim,
+            giống như một vùng đất cấm không có người ở trong thế giới thời tiền sử đầy rẫy những nguy hiểm.
+            Nữ chính Wu You dấn thân vào cuộc hành trình với những người có mục đích khác nhau.
+            Hòn đảo đầy rẫy nguy hiểm và nguy hiểm, những con khủng long cổ đại thường xuyên chặn đường,
+            quái vật lần lượt xuất hiện. Nơi đây còn có con khủng long bạo chúa đói khát lâu ngày ẩn náu trong khu rừng
+            rậm rạp và háo hức theo dõi.
+            Những con người tưởng như không thể tách rời nhau đang nỗ lực tiến về phía trước. Trên hòn đảo có thể ăn
+            thịt người này, liệu con người có thể sống sót vượt qua?
+        </p>
+    </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <sup>(c)</sup> 2017 - Thiết kế web bởi trang phimmoizzzzzz.net
+</div>
+</body>
+</html>

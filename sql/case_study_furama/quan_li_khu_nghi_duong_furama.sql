@@ -402,5 +402,5 @@ delete from hop_dong hd where year(hd.ngay_lam_hop_dong)<2021;
 delete from khach_hang where ma_khach_hang not in (select distinct ma_khach_hang from hop_dong); 
 
 -- 19 Cập nhật giá cho các dịch vụ đi kèm được sử dụng trên 10 lần trong năm 2020 lên gấp đôi.
-
+select dvdk.ten_dich_vu_di_kem,sum(ifnull())
 -- 20 hiển thị thông tin của tất cả các nhân viên và khách hàng có trong hệ thống, thông tin hiển thị bao gồm id (ma_nhan_vien, ma_khach_hang), ho_ten, email, so_dien_thoai, ngay_sinh, dia_chi.
