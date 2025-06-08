@@ -24,7 +24,7 @@ public class RepoProduct implements IRepoProduct{
     public void add(Product product) {
         int id = productList.size() + 1;
         product.setId(id);
-       productList.add(product);
+        productList.add(product);
     }
 
     @Override
